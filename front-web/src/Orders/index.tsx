@@ -38,6 +38,16 @@ function Orders() {
     }
 
     const handleSubmit = () => {
+        if (!selectedProducts.length) {
+            toast.warning('Selecione ao menos 1 produto.');
+            return;
+        }
+
+        if (!orderLocation?.address.length) {
+            toast.warning('Informe o endereço de entrega.');
+            return;
+        }
+
         const productsIds = selectedProducts.map(({ id }) => ({ id }));
         const payload = {
             ...orderLocation!,
@@ -46,7 +56,7 @@ function Orders() {
 
         saveOrder(payload)
             .then((response) => {
-                toast.error(`Pedido enviado com sucesso! Nº ${response.data.id}`);
+                toast.success(`Pedido enviado com sucesso! Nº ${response.data.id}`);
                 setSelectedProducts([]);
             })
             .catch(() => {
